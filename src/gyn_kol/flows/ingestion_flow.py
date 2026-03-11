@@ -91,11 +91,11 @@ async def resolve_entities() -> int:
 
 @task
 async def build_graph() -> int:
-    from gyn_kol.graph.builder import build_coauthorship_graph
+    from gyn_kol.graph.builder import build_clinician_graph
     from gyn_kol.graph.centrality import compute_and_store_centrality
 
     async with async_session_factory() as session:
-        G = await build_coauthorship_graph(session)
+        G = await build_clinician_graph(session)
         return await compute_and_store_centrality(session, G)
 
 
@@ -132,6 +132,14 @@ async def ingest_mbs() -> int:
 
 
 @task(retries=1, retry_delay_seconds=300)
+async def scan_authors_ahpra() -> int:
+    from gyn_kol.ingestion.ahpra_enrich import scan_authors_against_ahpra
+
+    async with async_session_factory() as session:
+        return await scan_authors_against_ahpra(session)
+
+
+@task(retries=1, retry_delay_seconds=300)
 async def enrich_ahpra_specialty() -> int:
     from gyn_kol.ingestion.ahpra_enrich import enrich_specialty_from_ahpra
 
@@ -158,6 +166,7 @@ STEPS = [
     ("AHPRA registrations", ingest_ahpra),
     ("MBS items", ingest_mbs),
     ("Registration verification", verify_registrations),
+    ("AHPRA author scan", scan_authors_ahpra),
     ("Entity resolution", resolve_entities),
     ("MBS linkage", link_mbs),
     ("Graph build", build_graph),
@@ -170,7 +179,7 @@ STEPS = [
 RESULT_KEYS = [
     "pubmed", "crossref", "trials", "nhmrc", "colleges",
     "hospitals", "canrefer", "ahpra", "mbs",
-    "verification", "resolved", "mbs_linkage",
+    "verification", "ahpra_author_scan", "resolved", "mbs_linkage",
     "graph", "influence", "early_adopter", "tiers",
     "ahpra_enrich",
 ]

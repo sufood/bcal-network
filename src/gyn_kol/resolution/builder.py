@@ -5,21 +5,34 @@ from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from gyn_kol.models.clinician import MasterClinician
+from gyn_kol.models.clinician_source_link import ClinicianSourceLink
 from gyn_kol.resolution.normalise import normalise_name
 
 logger = logging.getLogger(__name__)
+
+# Only keep clinicians confirmed via an Australian register source
+AUSTRALIAN_SOURCES = {"ahpra", "canrefer", "ranzcog", "ages", "college"}
 
 
 async def build_master_records(
     session: AsyncSession, clusters: dict[str, list[dict]]
 ) -> int:
-    # Clear old master records — they are fully derived from raw source data
+    # Clear old derived records — they are fully rebuilt from raw source data
+    link_result = await session.execute(delete(ClinicianSourceLink))
+    logger.info("Cleared %d old clinician source links", link_result.rowcount)
     result = await session.execute(delete(MasterClinician))
     logger.info("Cleared %d old master clinician records", result.rowcount)
 
     built = 0
+    skipped = 0
 
     for clinician_id, records in clusters.items():
+        # Only keep clinicians with at least one Australian register source
+        cluster_sources = {r["source"] for r in records}
+        if not cluster_sources & AUSTRALIAN_SOURCES:
+            skipped += 1
+            continue
+
         # Pick most common name as display name
         name_counts: Counter[str] = Counter()
         for r in records:
@@ -57,8 +70,23 @@ async def build_master_records(
             grant_count=source_counter.get("nhmrc", 0),
         )
         session.add(clinician)
+
+        # Persist the source record links for graph mapping
+        for rec in records:
+            link = ClinicianSourceLink(
+                clinician_id=clinician_id,
+                source=rec["source"],
+                source_record_id=rec["id"],
+                name_raw=rec["name_raw"],
+                name_normalised=rec["name_norm"],
+            )
+            session.add(link)
+
         built += 1
 
     await session.commit()
-    logger.info("Built %d master clinician records", built)
+    logger.info(
+        "Built %d master clinician records (%d skipped — no Australian register source)",
+        built, skipped,
+    )
     return built

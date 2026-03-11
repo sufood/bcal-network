@@ -1,11 +1,15 @@
-"""Post-resolution AHPRA enrichment — look up specialty by clinician name.
+"""AHPRA enrichment — look up practitioners by name on the AHPRA register.
 
-After entity resolution, many master clinicians lack a specialty because
-they were found via PubMed/trials/grants which don't carry that info.
-This module searches AHPRA by each clinician's full name, navigates to
-their detail page, and extracts specialist registration type and specialty.
+Two entry points:
 
-Only targets clinicians without specialty, ordered by influence score.
+1. ``scan_authors_against_ahpra`` — **pre-resolution**.  Takes every
+   Australian-affiliated PubMed author and searches AHPRA.  Authors that
+   are found get an ``AhpraRegistration`` row, which means they will pass
+   the Australian-source filter during entity resolution.
+
+2. ``enrich_specialty_from_ahpra`` — **post-resolution**.  For master
+   clinicians that already exist but lack a specialty, searches AHPRA to
+   fill it in.
 """
 
 from __future__ import annotations
@@ -25,6 +29,7 @@ if TYPE_CHECKING:
 
 from gyn_kol.models.ahpra_registration import AhpraRegistration
 from gyn_kol.models.clinician import MasterClinician
+from gyn_kol.models.paper import Author
 from gyn_kol.resolution.normalise import normalise_name
 
 logger = logging.getLogger(__name__)
@@ -160,7 +165,7 @@ async def _search_and_open_detail(
         await page.wait_for_selector("#name-reg, #predictiveSearchHomeBtn", timeout=15000)
     except Exception:
         logger.debug("AHPRA enrichment: search form not found, proceeding anyway")
-    await asyncio.sleep(random.uniform(2, 4))
+    await asyncio.sleep(random.uniform(0.5, 1))
 
     # Fill full name into search field
     search_input = page.locator("#name-reg")
@@ -192,7 +197,7 @@ async def _search_and_open_detail(
         )
     except Exception:
         pass
-    await asyncio.sleep(random.uniform(2, 4))
+    await asyncio.sleep(random.uniform(0.5, 1))
 
     # Collect result names and find best match index
     name_norm = normalise_name(full_name)
@@ -253,7 +258,7 @@ async def _search_and_open_detail(
     except Exception:
         logger.debug("AHPRA: detail page didn't load for '%s'", full_name)
         return None
-    await asyncio.sleep(random.uniform(1, 2))
+    await asyncio.sleep(random.uniform(0.3, 0.7))
 
     html = await page.content()
     detail = _parse_detail_page(html)
@@ -263,17 +268,78 @@ async def _search_and_open_detail(
     return detail
 
 
+async def _worker(
+    worker_id: int,
+    browser: Any,
+    queue: asyncio.Queue,
+    results: list[tuple[str, str, dict[str, Any]]],
+    total: int,
+    progress: dict[str, int],
+) -> None:
+    """Browser worker: pulls (clinician_id, name) from queue, searches AHPRA."""
+    context = await browser.new_context(
+        user_agent=USER_AGENT,
+        viewport={"width": 1920, "height": 1080},
+    )
+    page = await context.new_page()
+
+    try:
+        while True:
+            try:
+                clinician_id, name, state = queue.get_nowait()
+            except asyncio.QueueEmpty:
+                return
+
+            progress["done"] += 1
+            idx = progress["done"]
+
+            try:
+                detail = await _search_and_open_detail(page, name)
+            except Exception:
+                logger.debug(
+                    "AHPRA worker %d: failed for '%s'", worker_id, name, exc_info=True
+                )
+                await asyncio.sleep(random.uniform(1, 2))
+                continue
+
+            if detail and detail.get("specialty"):
+                results.append((clinician_id, state, detail))
+                logger.info(
+                    "AHPRA enrichment [%d/%d] w%d: %s → %s (match=%.0f)",
+                    idx, total, worker_id, name, detail["specialty"],
+                    detail.get("_match_score", 0),
+                )
+            else:
+                logger.debug(
+                    "AHPRA enrichment [%d/%d] w%d: no match for '%s'",
+                    idx, total, worker_id, name,
+                )
+
+            # Rate limit per worker — staggered across workers
+            await asyncio.sleep(random.uniform(1.5, 3))
+    finally:
+        await context.close()
+
+
+# Number of parallel browser contexts
+DEFAULT_WORKERS = 4
+
+
 async def enrich_specialty_from_ahpra(
     session: AsyncSession,
     limit: int = DEFAULT_LIMIT,
     headless: bool = True,
+    num_workers: int = DEFAULT_WORKERS,
 ) -> int:
     """Search AHPRA by full clinician name, visit detail page, update specialty.
+
+    Runs multiple browser contexts in parallel for throughput.
 
     Args:
         session: Async DB session.
         limit: Max number of clinicians to look up.
         headless: Run browser headlessly.
+        num_workers: Number of parallel browser contexts.
 
     Returns:
         Number of clinicians updated with specialty.
@@ -294,100 +360,237 @@ async def enrich_specialty_from_ahpra(
         return 0
 
     logger.info(
-        "AHPRA enrichment: looking up %d clinicians without specialty", len(clinicians)
+        "AHPRA enrichment: looking up %d clinicians with %d workers",
+        len(clinicians), num_workers,
     )
 
-    updated = 0
+    # Pre-fetch existing registration numbers to avoid per-row SELECT
+    existing_regs_result = await session.execute(
+        select(AhpraRegistration.registration_number)
+    )
+    existing_reg_nums: set[str] = {
+        r for (r,) in existing_regs_result.all() if r
+    }
+
+    # Build work queue
+    queue: asyncio.Queue = asyncio.Queue()
+    for clinician in clinicians:
+        name = clinician.name_display or ""
+        if name and len(name) >= 3:
+            queue.put_nowait((str(clinician.clinician_id), name, clinician.state))
+
+    # Shared results list — workers append (clinician_id, state, detail)
+    results: list[tuple[str, str, dict[str, Any]]] = []
+    progress: dict[str, int] = {"done": 0}
+    total = queue.qsize()
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=headless)
         try:
-            context = await browser.new_context(
-                user_agent=USER_AGENT,
-                viewport={"width": 1920, "height": 1080},
-            )
-            page = await context.new_page()
-
-            for i, clinician in enumerate(clinicians):
-                name = clinician.name_display or ""
-                if not name or len(name) < 3:
-                    continue
-
-                try:
-                    detail = await _search_and_open_detail(page, name)
-                except Exception:
-                    logger.debug(
-                        "AHPRA enrichment: failed for '%s'", name, exc_info=True
-                    )
-                    await asyncio.sleep(random.uniform(1, 2))
-                    continue
-
-                if not detail:
-                    logger.debug(
-                        "AHPRA enrichment [%d/%d]: no match for '%s'",
-                        i + 1, len(clinicians), name,
-                    )
-                    await asyncio.sleep(random.uniform(1, 2))
-                    continue
-
-                specialty = detail.get("specialty")
-                match_score = detail.get("_match_score", 0)
-
-                if specialty:
-                    await session.execute(
-                        update(MasterClinician)
-                        .where(MasterClinician.clinician_id == clinician.clinician_id)
-                        .values(specialty=specialty)
-                    )
-                    updated += 1
-                    logger.info(
-                        "AHPRA enrichment [%d/%d]: %s → %s (match=%.0f, regs=%s)",
-                        i + 1, len(clinicians), name, specialty, match_score,
-                        [r.get("registration_type", "?") for r in detail.get("all_registrations", [])],
-                    )
-
-                    # Store in ahpra_registrations if not already there
-                    reg_num = detail.get("_registration_number") or detail.get("registration_number")
-                    if reg_num:
-                        existing = await session.execute(
-                            select(AhpraRegistration).where(
-                                AhpraRegistration.registration_number == reg_num
-                            )
-                        )
-                        if not existing.scalar_one_or_none():
-                            session.add(AhpraRegistration(
-                                name_raw=detail.get("name_raw", name),
-                                name_normalised=normalise_name(
-                                    detail.get("name_raw", name)
-                                ),
-                                registration_number=reg_num,
-                                profession=detail.get("profession"),
-                                registration_type=detail.get("registration_type"),
-                                specialty=specialty,
-                                state=clinician.state,
-                                raw_payload=detail,
-                            ))
-                else:
-                    logger.debug(
-                        "AHPRA enrichment [%d/%d]: no specialist specialty for '%s' (regs=%s)",
-                        i + 1, len(clinicians), name,
-                        [r.get("registration_type", "?") for r in detail.get("all_registrations", [])],
-                    )
-
-                # Rate limit — be polite to AHPRA
-                await asyncio.sleep(random.uniform(2, 4))
-
-                # Commit periodically
-                if (i + 1) % 10 == 0:
-                    await session.commit()
-                    logger.info(
-                        "AHPRA enrichment: progress %d/%d, updated %d so far",
-                        i + 1, len(clinicians), updated,
-                    )
-
+            workers = [
+                _worker(i, browser, queue, results, total, progress)
+                for i in range(min(num_workers, total))
+            ]
+            await asyncio.gather(*workers)
         finally:
             await browser.close()
+
+    # Apply results to DB (sequential — safe for async session)
+    updated = 0
+    for clinician_id, state, detail in results:
+        specialty = detail["specialty"]
+        await session.execute(
+            update(MasterClinician)
+            .where(MasterClinician.clinician_id == clinician_id)
+            .values(specialty=specialty)
+        )
+        updated += 1
+
+        reg_num = detail.get("_registration_number") or detail.get("registration_number")
+        if reg_num and reg_num not in existing_reg_nums:
+            existing_reg_nums.add(reg_num)
+            session.add(AhpraRegistration(
+                name_raw=detail.get("name_raw", detail.get("_search_name", "")),
+                name_normalised=normalise_name(
+                    detail.get("name_raw", detail.get("_search_name", ""))
+                ),
+                registration_number=reg_num,
+                profession=detail.get("profession"),
+                registration_type=detail.get("registration_type"),
+                specialty=specialty,
+                state=state,
+                raw_payload=detail,
+            ))
 
     await session.commit()
     logger.info("AHPRA enrichment: updated %d/%d clinicians", updated, len(clinicians))
     return updated
+
+
+# ---------------------------------------------------------------------------
+# Pre-resolution: scan ALL Australian authors against AHPRA
+# ---------------------------------------------------------------------------
+
+
+async def _scan_worker(
+    worker_id: int,
+    browser: Any,
+    queue: asyncio.Queue,
+    results: list[tuple[str, str, dict[str, Any]]],
+    total: int,
+    progress: dict[str, int],
+) -> None:
+    """Like _worker but accepts any AHPRA match (specialty not required)."""
+    context = await browser.new_context(
+        user_agent=USER_AGENT,
+        viewport={"width": 1920, "height": 1080},
+    )
+    page = await context.new_page()
+
+    try:
+        while True:
+            try:
+                author_id, name, state = queue.get_nowait()
+            except asyncio.QueueEmpty:
+                return
+
+            progress["done"] += 1
+            idx = progress["done"]
+
+            try:
+                detail = await _search_and_open_detail(page, name)
+            except Exception:
+                logger.debug(
+                    "AHPRA scan w%d: failed for '%s'", worker_id, name, exc_info=True
+                )
+                await asyncio.sleep(random.uniform(1, 2))
+                continue
+
+            if detail:
+                results.append((author_id, state, detail))
+                logger.info(
+                    "AHPRA scan [%d/%d] w%d: %s → found (match=%.0f, specialty=%s)",
+                    idx, total, worker_id, name,
+                    detail.get("_match_score", 0),
+                    detail.get("specialty", "n/a"),
+                )
+            else:
+                logger.debug(
+                    "AHPRA scan [%d/%d] w%d: no match for '%s'",
+                    idx, total, worker_id, name,
+                )
+
+            await asyncio.sleep(random.uniform(1.5, 3))
+    finally:
+        await context.close()
+
+
+async def scan_authors_against_ahpra(
+    session: AsyncSession,
+    headless: bool = True,
+    num_workers: int = DEFAULT_WORKERS,
+) -> int:
+    """Search AHPRA for every Australian-affiliated PubMed author.
+
+    Runs **before** entity resolution so that authors confirmed in the
+    AHPRA register get an ``AhpraRegistration`` row.  This ensures they
+    pass the Australian-source filter in ``build_master_records``.
+
+    Authors whose normalised name already appears in ``ahpra_registrations``
+    are skipped to avoid redundant lookups.
+
+    Returns:
+        Number of new ``AhpraRegistration`` rows created.
+    """
+    from playwright.async_api import async_playwright
+
+    # All Australian authors (state detected)
+    stmt = select(Author).where(Author.state.isnot(None))
+    authors = (await session.execute(stmt)).scalars().all()
+
+    if not authors:
+        logger.info("AHPRA author scan: no Australian authors to scan")
+        return 0
+
+    # Pre-fetch already-known AHPRA names and reg numbers to skip duplicates
+    existing_names_result = await session.execute(
+        select(AhpraRegistration.name_normalised)
+    )
+    existing_names: set[str] = {
+        n for (n,) in existing_names_result.all() if n
+    }
+    existing_regs_result = await session.execute(
+        select(AhpraRegistration.registration_number)
+    )
+    existing_reg_nums: set[str] = {
+        r for (r,) in existing_regs_result.all() if r
+    }
+
+    # Build queue — skip authors already matched by normalised name
+    queue: asyncio.Queue = asyncio.Queue()
+    skipped_existing = 0
+    for author in authors:
+        name = author.name_raw or ""
+        if len(name) < 3:
+            continue
+        norm = normalise_name(name)
+        if norm in existing_names:
+            skipped_existing += 1
+            continue
+        queue.put_nowait((author.author_id, name, author.state))
+
+    total = queue.qsize()
+    logger.info(
+        "AHPRA author scan: %d Australian authors to look up "
+        "(%d already matched, %d total) with %d workers",
+        total, skipped_existing, len(authors), num_workers,
+    )
+
+    if total == 0:
+        return 0
+
+    results: list[tuple[str, str, dict[str, Any]]] = []
+    progress: dict[str, int] = {"done": 0}
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=headless)
+        try:
+            workers = [
+                _scan_worker(i, browser, queue, results, total, progress)
+                for i in range(min(num_workers, total))
+            ]
+            await asyncio.gather(*workers)
+        finally:
+            await browser.close()
+
+    # Persist new AhpraRegistration rows
+    created = 0
+    for _author_id, state, detail in results:
+        reg_num = detail.get("_registration_number") or detail.get("registration_number")
+        if reg_num and reg_num in existing_reg_nums:
+            continue  # already stored from a different name variant
+
+        name_raw = detail.get("name_raw", detail.get("_search_name", ""))
+        norm = normalise_name(name_raw)
+
+        session.add(AhpraRegistration(
+            name_raw=name_raw,
+            name_normalised=norm,
+            registration_number=reg_num,
+            profession=detail.get("profession"),
+            registration_type=detail.get("registration_type"),
+            specialty=detail.get("specialty"),
+            state=state,
+            raw_payload=detail,
+        ))
+        if reg_num:
+            existing_reg_nums.add(reg_num)
+        existing_names.add(norm)
+        created += 1
+
+    await session.commit()
+    logger.info(
+        "AHPRA author scan: created %d new registrations from %d matches",
+        created, len(results),
+    )
+    return created

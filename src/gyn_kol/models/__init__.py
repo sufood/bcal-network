@@ -4,6 +4,7 @@ from gyn_kol.models.canrefer_profile import CanreferProfile
 from gyn_kol.models.clinician import MasterClinician
 from gyn_kol.models.clinician_mbs import ClinicianMbs
 from gyn_kol.models.clinician_profile import ClinicianProfile
+from gyn_kol.models.clinician_source_link import ClinicianSourceLink
 from gyn_kol.models.coauthorship import Coauthorship
 from gyn_kol.models.college_profile import CollegeProfile
 from gyn_kol.models.grant import Grant
@@ -21,6 +22,7 @@ __all__ = [
     "CanreferProfile",
     "ClinicianMbs",
     "ClinicianProfile",
+    "ClinicianSourceLink",
     "Coauthorship",
     "CollegeProfile",
     "Grant",

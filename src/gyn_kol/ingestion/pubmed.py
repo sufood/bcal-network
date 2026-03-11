@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 NCBI_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 
-MESH_QUERIES = [
+MESH_TERMS = [
     "gynaecology",
     "laparoscopy",
     "endometriosis",
@@ -27,22 +27,31 @@ MESH_QUERIES = [
 
 _semaphore = asyncio.Semaphore(8)
 
+ESEARCH_PAGE_SIZE = 10_000  # PubMed allows up to 100k per request
 
-def _build_search_query(mesh_term: str, years: int = 5) -> str:
-    return f'({mesh_term}[MeSH Terms]) AND (Australia[Affiliation]) AND ("last {years} years"[PDat])'
+
+def _build_search_query(mesh_terms: list[str] | None = None, years: int = 5) -> str:
+    terms = mesh_terms or MESH_TERMS
+    mesh_clause = " OR ".join(f"{t}[MeSH Terms]" for t in terms)
+    return f'({mesh_clause}) AND (Australia[Affiliation]) AND ("last {years} years"[PDat])'
 
 
 @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=30))
-async def _esearch(
-    client: httpx.AsyncClient, query: str, max_results: int, api_key: str
-) -> list[str]:
+async def _esearch_page(
+    client: httpx.AsyncClient,
+    query: str,
+    retstart: int,
+    retmax: int,
+    api_key: str,
+) -> tuple[list[str], int]:
+    """Fetch a single page of PubMed search results. Returns (pmids, total_count)."""
     async with _semaphore:
         params: dict[str, Any] = {
             "db": "pubmed",
             "term": query,
-            "retmax": max_results,
+            "retstart": retstart,
+            "retmax": retmax,
             "retmode": "json",
-            "usehistory": "n",
         }
         if api_key:
             params["api_key"] = api_key
@@ -50,7 +59,32 @@ async def _esearch(
         resp = await client.get(f"{NCBI_BASE}/esearch.fcgi", params=params)
         resp.raise_for_status()
         data = resp.json()
-        return data.get("esearchresult", {}).get("idlist", [])
+        result = data.get("esearchresult", {})
+        total = int(result.get("count", 0))
+        ids = result.get("idlist", [])
+        return ids, total
+
+
+async def _esearch_all(
+    client: httpx.AsyncClient, query: str, api_key: str
+) -> list[str]:
+    """Paginate through all PubMed search results for a query."""
+    all_pmids: list[str] = []
+    retstart = 0
+
+    ids, total = await _esearch_page(client, query, retstart, ESEARCH_PAGE_SIZE, api_key)
+    all_pmids.extend(ids)
+    logger.info("PubMed total hits: %d (fetched %d so far)", total, len(all_pmids))
+
+    while len(all_pmids) < total:
+        retstart += ESEARCH_PAGE_SIZE
+        ids, _ = await _esearch_page(client, query, retstart, ESEARCH_PAGE_SIZE, api_key)
+        if not ids:
+            break
+        all_pmids.extend(ids)
+        logger.info("PubMed pagination: fetched %d / %d", len(all_pmids), total)
+
+    return all_pmids
 
 
 @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=30))
@@ -183,6 +217,11 @@ async def _store_article(session: AsyncSession, parsed: dict[str, Any]) -> None:
     await session.flush()
 
     for auth_data in parsed["authors"]:
+        # Only keep authors with a detected Australian state
+        state = _extract_state(auth_data["affiliation"])
+        if not state:
+            continue
+
         # Check for existing author by name (simple dedup within PubMed)
         name_lower = auth_data["name"].lower().strip()
         existing_author = await session.execute(
@@ -195,7 +234,7 @@ async def _store_article(session: AsyncSession, parsed: dict[str, Any]) -> None:
                 name_raw=auth_data["name"],
                 name_normalised=name_lower,
                 affiliation_raw=auth_data["affiliation"],
-                state=_extract_state(auth_data["affiliation"]),
+                state=state,
             )
             session.add(author)
             await session.flush()
@@ -213,26 +252,23 @@ async def _store_article(session: AsyncSession, parsed: dict[str, Any]) -> None:
 async def fetch_pubmed_results(
     session: AsyncSession,
     query: str | None = None,
-    max_results: int = 500,
     api_key: str = "",
 ) -> int:
     stored = 0
     async with httpx.AsyncClient(timeout=30.0) as client:
-        queries = [_build_search_query(q) for q in MESH_QUERIES] if query is None else [query]
+        q = query or _build_search_query()
+        logger.info("PubMed search: %s", q)
+        pmids = await _esearch_all(client, q, api_key)
+        logger.info("Unique PMIDs to fetch: %d", len(pmids))
 
-        for q in queries:
-            logger.info("PubMed search: %s", q)
-            pmids = await _esearch(client, q, max_results, api_key)
-            logger.info("Found %d PMIDs", len(pmids))
-
-            # Fetch in batches of 100
-            for i in range(0, len(pmids), 100):
-                batch = pmids[i : i + 100]
-                articles = await _efetch(client, batch, api_key)
-                for article in articles:
-                    parsed = _parse_article(article)
-                    await _store_article(session, parsed)
-                    stored += 1
+        # Fetch in batches of 100
+        for i in range(0, len(pmids), 100):
+            batch = pmids[i : i + 100]
+            articles = await _efetch(client, batch, api_key)
+            for article in articles:
+                parsed = _parse_article(article)
+                await _store_article(session, parsed)
+                stored += 1
 
         await session.commit()
 

@@ -33,11 +33,11 @@ async def recalculate_tiers() -> int:
 
 @task
 async def rebuild_graph() -> int:
-    from gyn_kol.graph.builder import build_coauthorship_graph
+    from gyn_kol.graph.builder import build_clinician_graph
     from gyn_kol.graph.centrality import compute_and_store_centrality
 
     async with async_session_factory() as session:
-        G = await build_coauthorship_graph(session)
+        G = await build_clinician_graph(session)
         return await compute_and_store_centrality(session, G)
 
 

@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBS Item Numbers: Pancreatic Cancer — Australia</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #0f1f3d;
+    --teal: #00897b;
+    --teal-light: #e0f2f1;
+    --amber: #f59e0b;
+    --amber-light: #fef3c7;
+    --rose: #e11d48;
+    --rose-light: #fff1f2;
+    --slate: #475569;
+    --muted: #94a3b8;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 28px 40px 24px;
+    border-bottom: 3px solid var(--teal);
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+  header p { color: #94a3b8; font-size: 12.5px; }
+  .header-badges { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #cbd5e1;
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    background: #fef9c3;
+    border-left: 3px solid #ca8a04;
+    padding: 10px 16px;
+    font-size: 11.5px;
+    color: #713f12;
+    margin: 16px 40px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .disclaimer strong { color: #92400e; }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: calc(100vh - 160px); }
+
+  /* ── SIDEBAR NAV ── */
+  nav {
+    width: 200px;
+    min-width: 200px;
+    background: var(--navy);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  nav .nav-section {
+    padding: 4px 16px 12px;
+    text-transform: uppercase;
+    font-size: 9.5px;
+    letter-spacing: 1.2px;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  nav a {
+    display: block;
+    padding: 7px 20px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 12px;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  nav a:hover { color: white; background: rgba(255,255,255,0.05); }
+  nav a.active { color: white; border-left-color: var(--teal); background: rgba(0,137,123,0.15); }
+
+  /* ── MAIN CONTENT ── */
+  main { flex: 1; padding: 24px 32px 48px; max-width: 1100px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 4px;
+    padding-top: 8px;
+  }
+  .section-subtitle { color: var(--slate); font-size: 12px; margin-bottom: 16px; }
+  .section-divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  /* ── STAGE PILL ── */
+  .stage-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 10px;
+  }
+  .stage-I   { background: #dcfce7; color: #15803d; }
+  .stage-II  { background: #dbeafe; color: #1d4ed8; }
+  .stage-III { background: #fef3c7; color: #b45309; }
+  .stage-IV  { background: #ffe4e6; color: #be123c; }
+  .stage-all { background: #f1f5f9; color: #334155; }
+
+  /* ── CATEGORY LABEL ── */
+  .cat-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--slate);
+    margin: 18px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cat-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── MBS TABLE ── */
+  .mbs-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; font-size: 12.5px; }
+  .mbs-table thead th {
+    background: var(--navy);
+    color: #cbd5e1;
+    font-weight: 500;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 8px 10px;
+    text-align: left;
+    border: none;
+  }
+  .mbs-table thead th:first-child { border-radius: 4px 0 0 0; }
+  .mbs-table thead th:last-child { border-radius: 0 4px 0 0; }
+  .mbs-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  .mbs-table tbody tr:hover { background: #f8fafc; }
+  .mbs-table td { padding: 9px 10px; vertical-align: top; }
+
+  .item-num {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 12.5px;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+  .item-num a { color: var(--teal); text-decoration: none; }
+  .item-num a:hover { text-decoration: underline; }
+
+  .item-desc { color: var(--text); max-width: 420px; }
+  .item-desc small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+
+  .fee {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #166534;
+    white-space: nowrap;
+  }
+  .fee.unconfirmed { color: #92400e; }
+
+  .benefit { color: var(--slate); font-size: 11.5px; white-space: nowrap; }
+
+  .repeat { font-size: 11.5px; color: var(--slate); }
+  .repeat .freq { font-weight: 600; color: var(--navy); }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+  }
+  .tag-primary { background: #dbeafe; color: #1e40af; }
+  .tag-secondary { background: #f1f5f9; color: #475569; }
+  .tag-new { background: #dcfce7; color: #166534; }
+  .tag-h { background: #fef3c7; color: #92400e; }
+
+  /* ── INFO BOXES ── */
+  .info-box {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #134e4a;
+    margin: 12px 0;
+  }
+  .info-box.amber {
+    background: var(--amber-light);
+    border-color: var(--amber);
+    color: #78350f;
+  }
+
+  /* ── STAGING OVERVIEW ── */
+  .staging-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0 20px; }
+  .staging-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    background: white;
+  }
+  .staging-card h4 { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .staging-card ul { list-style: none; font-size: 11px; color: var(--slate); }
+  .staging-card ul li::before { content: '• '; color: var(--teal); }
+
+  /* ── SCROLLSPY ── */
+  section { scroll-margin-top: 20px; }
+
+  /* ── FOOTNOTE ── */
+  .footnote {
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    padding-top: 6px;
+  }
+  .confirm-icon { color: #16a34a; font-size: 11px; }
+  .unconfirm-icon { color: #d97706; font-size: 11px; }
+
+  @media (max-width: 900px) {
+    nav { display: none; }
+    main { padding: 16px; }
+    .staging-grid { grid-template-columns: repeat(2, 1fr); }
+    header { padding: 20px; }
+    .disclaimer { margin: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MBS Item Numbers: Pancreatic Cancer</h1>
+  <p>Medicare Benefits Schedule — Detection &amp; Treatment Reference | Australia</p>
+  <div class="header-badges">
+    <span class="badge">FEES AS AT 1 JUL 2025</span>
+    <span class="badge">AJCC 8TH EDITION STAGING</span>
+    <span class="badge">CATEGORY 1, 3, 5 &amp; 6 MBS</span>
+    <span class="badge">INCLUDES SECONDARY ITEMS</span>
+  </div>
+</header>
+
+<div class="disclaimer">
+  <strong>⚠ Clinical Reference Only.</strong> Schedule fees are sourced from MBS Online (July 2025 indexation, 2.4% applied). Fees marked ⚠ require verification at <a href="https://www.mbsonline.gov.au" target="_blank" style="color:#92400e">mbsonline.gov.au</a>. This document does not constitute billing or clinical advice. Always verify item eligibility against current MBS descriptors. 75% benefit applies to hospital in-patient services; 85% applies to out-of-hospital services where bulk-billed. Anaesthetic and assistant items attract additional benefits. <strong>Repeat medians</strong> are estimated clinical practice patterns — actual data available via Services Australia Medicare Item Reports.
+</div>
+
+<div class="layout">
+
+<nav id="sidebar">
+  <div class="nav-section">Overview</div>
+  <a href="#staging" class="active">Staging Overview</a>
+  <a href="#universal">Universal Items</a>
+  <div class="nav-section">By Stage</div>
+  <a href="#stage-i-ii">Stage I–II (Resectable)</a>
+  <a href="#stage-iii">Stage III (Locally Advanced)</a>
+  <a href="#stage-iv">Stage IV (Metastatic)</a>
+  <div class="nav-section">Ancillary</div>
+  <a href="#anaesthesia">Anaesthesia</a>
+  <a href="#oncology">Oncology Tx</a>
+  <a href="#palliation">Palliation</a>
+  <a href="#notes">Notes &amp; Legend</a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- STAGING OVERVIEW -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="staging">
+  <div class="section-title">Pancreatic Cancer: AJCC 8th Edition Staging</div>
+  <div class="section-subtitle">Staging drives the MBS item pathway. Clinical resectability classification is often more operationally relevant than pathological stage.</div>
+
+  <div class="staging-grid">
+    <div class="staging-card">
+      <span class="stage-pill stage-I">Stage I</span>
+      <h4>Resectable</h4>
+      <ul>
+        <li>T1–T2, N0, M0</li>
+        <li>Tumour ≤4 cm, confined to pancreas</li>
+        <li>No major vessel involvement</li>
+        <li>No regional node or distant mets</li>
+      </ul>
+    </div>
+    <div class="staging-card">
+      <span class="stage-pill stage-II">Stage II–IIB</span>
+      <h4>Borderline Resectable</h4>
+      <ul>
+        <li>T3 or N1 (1–3 nodes), M0</li>
+        <li>Tumour &gt;4 cm or minor vessel abutment</li>
+        <li>Limited regional nodal involvement</li>
+        <li>Neoadjuvant chemo often given</li>
+      </ul>
+    </div>
+    <div class="staging-card">
+      <span class="stage-pill stage-III">Stage III</span>
+      <h4>Locally Advanced</h4>
+      <ul>
+        <li>T4 or N2 (≥4 nodes), M0</li>
+        <li>Major vessel encasement (SMA, coeliac)</li>
+        <li>Unresectable without neoadjuvant Rx</li>
+        <li>Systemic chemo ± SBRT first line</li>
+      </ul>
+    </div>
+    <div class="staging-card">
+      <span class="stage-pill stage-IV">Stage IV</span>
+      <h4>Metastatic</h4>
+      <ul>
+        <li>Any T, Any N, M1</li>
+        <li>Liver, peritoneum most common mets</li>
+        <li>Palliative intent chemotherapy</li>
+        <li>Biliary palliation (stenting) key</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- UNIVERSAL ITEMS — ALL STAGES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="universal">
+  <span class="stage-pill stage-all">ALL STAGES</span>
+  <div class="section-title">Universal MBS Items — All Stages</div>
+  <div class="section-subtitle">These items apply across the entire care pathway regardless of stage.</div>
+
+  <!-- GP Consultations -->
+  <div class="cat-label">GP Consultations (Category 1 – Group A1)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=23&qt=item" target="_blank">23</a></span></td>
+        <td class="item-desc">GP professional attendance — standard (Level B, 6–20 min)<small>Typical referral, symptom review, results</small></td>
+        <td class="fee">$41.40</td>
+        <td class="benefit">$31.05</td>
+        <td class="repeat"><span class="freq">Monthly–Fortnightly</span><br>throughout active Rx</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=36&qt=item" target="_blank">36</a></span></td>
+        <td class="item-desc">GP professional attendance — long (Level C, 20–40 min)<small>Complex case management, chronic condition review</small></td>
+        <td class="fee">$80.10</td>
+        <td class="benefit">$60.10</td>
+        <td class="repeat"><span class="freq">Monthly</span><br>high symptom burden</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=44&qt=item" target="_blank">44</a></span></td>
+        <td class="item-desc">GP professional attendance — extended (Level D, &gt;40 min)<small>Complex multimorbidity, care coordination</small></td>
+        <td class="fee">$116.10</td>
+        <td class="benefit">$87.10</td>
+        <td class="repeat"><span class="freq">Infrequent</span><br>care planning, MDT</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Specialist Consultations -->
+  <div class="cat-label">Specialist &amp; Consultant Physician Consultations (Category 1 – Group A3/A4)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=104&qt=item" target="_blank">104</a></span></td>
+        <td class="item-desc">Specialist initial attendance (referred)<small>Surgeon, gastroenterologist, radiation oncologist</small></td>
+        <td class="fee">$160.25</td>
+        <td class="benefit">$120.20</td>
+        <td class="repeat"><span class="freq">Once per referral</span><br>new specialist episode</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=105&qt=item" target="_blank">105</a></span></td>
+        <td class="item-desc">Specialist subsequent attendance (referred)<small>Ongoing specialist review</small></td>
+        <td class="fee">$80.10</td>
+        <td class="benefit">$60.10</td>
+        <td class="repeat"><span class="freq">4–8 weekly</span><br>during active Rx</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=110&qt=item" target="_blank">110</a></span></td>
+        <td class="item-desc">Consultant physician initial attendance (referred)<small>Medical oncologist, gastroenterologist, hepatobiliary</small></td>
+        <td class="fee">$270.00</td>
+        <td class="benefit">$202.50</td>
+        <td class="repeat"><span class="freq">Once per referral</span><br>new oncologist episode</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=116&qt=item" target="_blank">116</a></span></td>
+        <td class="item-desc">Consultant physician subsequent attendance (referred)<small>Ongoing medical oncology / HPB physician review</small></td>
+        <td class="fee">$134.90</td>
+        <td class="benefit">$101.20</td>
+        <td class="repeat"><span class="freq">3–4 weekly</span><br>during chemotherapy</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=119&qt=item" target="_blank">119</a></span></td>
+        <td class="item-desc">Consultant physician minor attendance<small>Brief review, results communication</small></td>
+        <td class="fee">$67.35</td>
+        <td class="benefit">$50.55</td>
+        <td class="repeat"><span class="freq">Fortnightly</span><br>during chemo cycles</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=132&qt=item" target="_blank">132</a></span></td>
+        <td class="item-desc">Consultant physician management plan preparation (complex)<small>Multimorbidity plan; ≥2 conditions</small></td>
+        <td class="fee">$270.00</td>
+        <td class="benefit">$202.50</td>
+        <td class="repeat"><span class="freq">Annually</span><br>formal care plan</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pathology — Tumour Markers -->
+  <div class="cat-label">Pathology — Tumour Markers (Category 6 – Group P2)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=66650&qt=item" target="_blank">66650</a></span></td>
+        <td class="item-desc">Tumour marker quantitation — 1 test (CA19-9, CEA, AFP, CA125, HCG, NSE, etc.)<small>Monitoring of malignancy. CA19-9 is the primary marker for pancreatic cancer</small></td>
+        <td class="fee">~$34.65 ⚠</td>
+        <td class="benefit">~$26.00</td>
+        <td class="repeat"><span class="freq">Every 4–8 weeks</span><br>during Rx; 3-monthly surveillance</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=66655&qt=item" target="_blank">66655</a></span></td>
+        <td class="item-desc">Tumour marker quantitation — 2 tests (e.g. CA19-9 + CEA)<small>When dual monitoring is clinically indicated</small></td>
+        <td class="fee">~$47.80 ⚠</td>
+        <td class="benefit">~$35.85</td>
+        <td class="repeat"><span class="freq">As per 66650</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pathology — Biochemistry/Haematology -->
+  <div class="cat-label">Pathology — Biochemistry &amp; Haematology (Category 6 – Group P2)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=65070&qt=item" target="_blank">65070</a></span></td>
+        <td class="item-desc">Full blood count (FBC/FBE)<small>Pre-operative, chemotherapy monitoring, anaemia workup</small></td>
+        <td class="fee">~$18.50 ⚠</td>
+        <td class="benefit">~$13.90</td>
+        <td class="repeat"><span class="freq">Every 3–4 weeks</span><br>during chemo; pre-op</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=65090&qt=item" target="_blank">65090</a></span></td>
+        <td class="item-desc">Liver function tests (LFTs) — bilirubin, AST, ALT, ALP, GGT, albumin<small>Biliary obstruction monitoring; chemotherapy hepatotoxicity</small></td>
+        <td class="fee">~$20.35 ⚠</td>
+        <td class="benefit">~$15.25</td>
+        <td class="repeat"><span class="freq">Every 4–8 weeks</span><br>biliary obstruction monitoring</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=66536&qt=item" target="_blank">66536</a></span></td>
+        <td class="item-desc">HbA1c — glycated haemoglobin<small>New-onset diabetes may be an early sign; monitored post-pancreatectomy (exocrine/endocrine insufficiency)</small></td>
+        <td class="fee">~$19.35 ⚠</td>
+        <td class="benefit">~$14.50</td>
+        <td class="repeat"><span class="freq">3–6 monthly</span><br>post-pancreatectomy</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=66500&qt=item" target="_blank">66500</a></span></td>
+        <td class="item-desc">Serum amylase or lipase<small>Differential diagnosis; post-operative pancreatic fistula monitoring</small></td>
+        <td class="fee">~$14.85 ⚠</td>
+        <td class="benefit">~$11.15</td>
+        <td class="repeat"><span class="freq">As clinically indicated</span><br>post-op complication monitoring</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Diagnostic Imaging — Ultrasound -->
+  <div class="cat-label">Diagnostic Imaging — Ultrasound (Category 5 – Group I2)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=55036&qt=item" target="_blank">55036</a></span></td>
+        <td class="item-desc">Abdomen ultrasound — morphological assessment<small>First-line investigation for jaundice, abdominal pain; identifies biliary dilation, pancreatic mass</small></td>
+        <td class="fee">~$138.70 ⚠</td>
+        <td class="benefit">~$104.05</td>
+        <td class="repeat"><span class="freq">Typically once</span><br>at initial presentation</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Diagnostic Imaging — CT -->
+  <div class="cat-label">Diagnostic Imaging — Computed Tomography (Category 5 – Group I5)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=56507&qt=item" target="_blank">56507</a></span></td>
+        <td class="item-desc">CT upper abdomen &amp; pelvis — with IV contrast (pancreas protocol)<small>Primary staging modality; triphasic/pancreatic protocol CT for resectability assessment</small></td>
+        <td class="fee">~$281.75 ⚠</td>
+        <td class="benefit">~$211.30</td>
+        <td class="repeat"><span class="freq">Every 8–12 weeks</span><br>staging, restaging, surveillance</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=56807&qt=item" target="_blank">56807</a></span></td>
+        <td class="item-desc">CT chest, abdomen &amp; pelvis — with IV contrast<small>Comprehensive staging scan; assessment of distant metastases (liver, peritoneum, lung)</small></td>
+        <td class="fee">~$381.40 ⚠</td>
+        <td class="benefit">~$286.05</td>
+        <td class="repeat"><span class="freq">Every 8–12 weeks</span><br>staging, restaging</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=56307&qt=item" target="_blank">56307</a></span></td>
+        <td class="item-desc">CT chest — with IV contrast<small>Metastatic staging — lung, mediastinal nodes</small></td>
+        <td class="fee">~$215.25 ⚠</td>
+        <td class="benefit">~$161.45</td>
+        <td class="repeat"><span class="freq">At initial staging</span><br>then as clinically indicated</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Histopathology -->
+  <div class="cat-label">Pathology — Histopathology &amp; Cytology (Category 6 – Group P5)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=72823&qt=item" target="_blank">72823</a></span></td>
+        <td class="item-desc">Histopathological examination — complex surgical specimen<small>Whipple's or pancreatectomy resection specimen. Includes margin assessment, lymph node harvest</small></td>
+        <td class="fee">~$157.50 ⚠</td>
+        <td class="benefit">~$118.15</td>
+        <td class="repeat"><span class="freq">Once</span><br>post-surgical resection</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=73055&qt=item" target="_blank">73055</a></span></td>
+        <td class="item-desc">Cytological examination — FNA specimen (EUS-FNA)<small>Cytology of aspirate from EUS-FNA of pancreatic mass</small></td>
+        <td class="fee">~$63.85 ⚠</td>
+        <td class="benefit">~$47.90</td>
+        <td class="repeat"><span class="freq">1–2 times</span><br>at diagnosis</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- MRI -->
+  <div class="cat-label">Diagnostic Imaging — MRI (Category 5 – Group I6)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=63563&qt=item" target="_blank">63563</a></span></td>
+        <td class="item-desc">MRI abdomen — with or without contrast (MRCP)<small>MRCP for characterising pancreatic ductal anatomy, cystic lesions, biliary tree; problem-solving when CT indeterminate</small></td>
+        <td class="fee">~$420.35 ⚠</td>
+        <td class="benefit">~$315.30</td>
+        <td class="repeat"><span class="freq">1–2 per staging</span><br>episode; 6-monthly surveillance for IPMN</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PET -->
+  <div class="cat-label">Nuclear Medicine — PET Scanning (Category 5 – Group I4) <span class="tag tag-new">Expanded Jul 2025</span></div>
+  <div class="info-box">From 1 July 2025, PET items 61612 and 61614 were expanded to enable use in the <strong>initial staging of any FDG-avid cancer</strong> (including pancreatic cancer) and evaluation following initial therapy. Pancreatic ductal adenocarcinoma is generally FDG-avid.</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=61612&qt=item" target="_blank">61612</a></span></td>
+        <td class="item-desc">FDG-PET scan — whole body, initial staging of FDG-avid cancer <span class="tag tag-new">Expanded Jul 2025</span><small>Pancreatic cancer staging; identifies occult metastases not seen on CT. Most useful in Stage II–III to exclude occult M1 disease pre-surgery</small></td>
+        <td class="fee">~$953.00 ⚠</td>
+        <td class="benefit">~$714.75</td>
+        <td class="repeat"><span class="freq">Once at staging</span><br>or borderline resectability assessment</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=61614&qt=item" target="_blank">61614</a></span></td>
+        <td class="item-desc">FDG-PET scan — whole body, post-therapy evaluation of FDG-avid cancer <span class="tag tag-new">Expanded Jul 2025</span><small>Post-neoadjuvant chemotherapy restaging to reassess resectability</small></td>
+        <td class="fee">~$953.00 ⚠</td>
+        <td class="benefit">~$714.75</td>
+        <td class="repeat"><span class="freq">1–2 per treatment course</span><br>post-neoadjuvant, post-surgery</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- STAGE I–II — RESECTABLE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="stage-i-ii">
+  <span class="stage-pill stage-I">STAGE I</span>
+  <span class="stage-pill stage-II">STAGE II</span>
+  <div class="section-title">Resectable Disease — Stages I &amp; II</div>
+  <div class="section-subtitle">Goal: curative resection. Pathway includes EUS staging/FNA, surgical resection (Whipple's or distal pancreatectomy), adjuvant chemotherapy, surveillance imaging.</div>
+
+  <!-- EUS -->
+  <div class="cat-label">Endoscopy — Endoscopic Ultrasound (EUS) (Category 3 – T8)</div>
+  <div class="info-box">EUS is the preferred modality for tissue diagnosis (FNA/biopsy) and locoregional staging. It is claimable when there is strong clinical suspicion of pancreatic neoplasia, including when CT is negative but clinical suspicion is high. NOT claimable for routine surveillance of chronic pancreatitis without clinical suspicion of malignancy.</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30692&qt=item" target="_blank">30692</a></span></td>
+        <td class="item-desc">EUS — with or without biopsy, for diagnosis of pancreatic/biliary/gastric submucosal tumour <span class="tag tag-h">H</span><small>Without FNA. Structural staging, mass characterisation. Hospital item.</small></td>
+        <td class="fee confirm-icon">✓ $425.75</td>
+        <td class="benefit">$319.35</td>
+        <td class="repeat"><span class="freq">Once at diagnosis</span><br>occasionally repeated if inconclusive</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30694&qt=item" target="_blank">30694</a></span></td>
+        <td class="item-desc">EUS — with or without biopsy + FNA, for diagnosis of pancreatic/biliary/gastric submucosal tumour <span class="tag tag-h">H</span><small>EUS with FNA for tissue diagnosis of pancreatic mass. Most commonly used item. Hospital item.</small></td>
+        <td class="fee">~$563.00 ⚠</td>
+        <td class="benefit">~$422.25</td>
+        <td class="repeat"><span class="freq">1–2 times</span><br>repeat if initial non-diagnostic</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30688&qt=item" target="_blank">30688</a></span></td>
+        <td class="item-desc">EUS — with or without biopsy, for staging of oesophageal, gastric or pancreatic cancer <span class="tag tag-h">H</span><small>Locoregional staging (T and N stage) of confirmed or suspected pancreatic cancer. Hospital item.</small></td>
+        <td class="fee confirm-icon">✓ $425.75</td>
+        <td class="benefit">$319.35</td>
+        <td class="repeat"><span class="freq">Once at staging</span><br>prior to planned resection</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30690&qt=item" target="_blank">30690</a></span></td>
+        <td class="item-desc">EUS — with or without biopsy + FNA (incl. locoregional lymph nodes) for staging of pancreatic/oesophageal/gastric cancer <span class="tag tag-h">H</span><small>EUS-FNA for staging including nodal sampling. Most comprehensive staging EUS item. Hospital item.</small></td>
+        <td class="fee">~$563.00 ⚠</td>
+        <td class="benefit">~$422.25</td>
+        <td class="repeat"><span class="freq">Once at staging</span><br>pre-operatively</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footnote">Note: 30688/30690 are for staging confirmed/strongly suspected pancreatic cancer. 30692/30694 are for diagnosis of a suspected pancreatic/biliary tumour. In practice, staging and diagnostic EUS are often performed at the same sitting; coding depends on primary indication.</div>
+
+  <!-- Surgery -->
+  <div class="cat-label">Surgery — Pancreatic Resection (Category 3 – T8) <span class="tag tag-h">H Items — Hospital Only</span></div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30584&qt=item" target="_blank">30584</a></span></td>
+        <td class="item-desc">Pancreaticoduodenectomy (Whipple's procedure) ± pylorus preservation — incl. cholecystectomy, pancreaticobiliary anastomosis, gastrojejunal anastomosis if performed<small>The primary resection for head of pancreas cancer. (Anaes.) (Assist.)</small></td>
+        <td class="fee confirm-icon">✓ $3,499.65</td>
+        <td class="benefit">$2,624.75</td>
+        <td class="repeat"><span class="freq">Once (curative)</span><br>not re-claimed for same patient</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30583&qt=item" target="_blank">30583</a></span></td>
+        <td class="item-desc">Distal pancreatectomy with splenic preservation — open or minimally invasive<small>For body/tail tumours where spleen preservation is possible. (Anaes.) (Assist.)</small></td>
+        <td class="fee confirm-icon">✓ $1,813.30</td>
+        <td class="benefit">$1,360.00</td>
+        <td class="repeat"><span class="freq">Once (curative)</span></td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30792&qt=item" target="_blank">30792</a></span></td>
+        <td class="item-desc">Distal pancreatectomy with splenectomy — open or minimally invasive<small>For body/tail tumours with splenic vessel involvement or en-bloc resection required. (Anaes.) (Assist.)</small></td>
+        <td class="fee confirm-icon">✓ $1,393.20</td>
+        <td class="benefit">$1,044.90</td>
+        <td class="repeat"><span class="freq">Once (curative)</span></td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30593&qt=item" target="_blank">30593</a></span></td>
+        <td class="item-desc">Pancreatectomy — near total or total (including duodenum) ± splenectomy <span class="tag tag-h">H</span><small>For multicentric disease or where partial resection would leave inadequate pancreatic tissue. (Anaes.) (Assist.)</small></td>
+        <td class="fee confirm-icon">✓ $2,202.15</td>
+        <td class="benefit">$1,651.65</td>
+        <td class="repeat"><span class="freq">Once (curative)</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ERCP Pre-operative -->
+  <div class="cat-label">Endoscopy — ERCP &amp; Biliary Interventions (Category 3 – T8)</div>
+  <div class="info-box amber">Pre-operative biliary drainage via ERCP is indicated for obstructive jaundice causing cholangitis, renal failure, or where surgery will be delayed &gt;2 weeks. Routine pre-operative biliary drainage is not recommended as it increases complication rates.</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30484&qt=item" target="_blank">30484</a></span></td>
+        <td class="item-desc">ERCP — diagnostic or therapeutic (not items 30664 or 30665)<small>Endoscopic retrograde cholangiopancreatography. ERCP training required. (Anaes.)</small></td>
+        <td class="fee">~$471.15 ⚠</td>
+        <td class="benefit">~$353.40</td>
+        <td class="repeat"><span class="freq">1–2 times</span><br>initial drainage, stent exchange</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30485&qt=item" target="_blank">30485</a></span></td>
+        <td class="item-desc">Endoscopic sphincterotomy ± extraction of stones from CBD<small>Sphincterotomy to facilitate stent placement or stone removal. (Anaes.)</small></td>
+        <td class="fee">~$398.30 ⚠</td>
+        <td class="benefit">~$298.70</td>
+        <td class="repeat"><span class="freq">Once per ERCP episode</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30491&qt=item" target="_blank">30491</a></span></td>
+        <td class="item-desc">Bile duct — endoscopic stenting (incl. endoscopy and cholangiography if performed)<small>Plastic or metal stent insertion for biliary decompression. (Anaes.)</small></td>
+        <td class="fee">~$398.30 ⚠</td>
+        <td class="benefit">~$298.70</td>
+        <td class="repeat"><span class="freq">Every 3 months</span><br>plastic stent; metal stent once</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30494&qt=item" target="_blank">30494</a></span></td>
+        <td class="item-desc">Bile duct — endoscopic exchange or removal of stent<small>Replacement of occluded plastic biliary stent. (Anaes.)</small></td>
+        <td class="fee">~$290.50 ⚠</td>
+        <td class="benefit">~$217.90</td>
+        <td class="repeat"><span class="freq">Every 3 months</span><br>for plastic stents pre-resection</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Assistance at Surgery -->
+  <div class="cat-label">Assistance at Surgery (Category 3 – T8)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=51300&qt=item" target="_blank">51300</a></span></td>
+        <td class="item-desc">Assistance at operation — surgeon's fee exceeds threshold (item 30584 triggers this)<small>First assistant fee for Whipple's and major pancreatic resections</small></td>
+        <td class="fee">~$700.00 ⚠</td>
+        <td class="benefit">~$525.00</td>
+        <td class="repeat"><span class="freq">Once per surgical episode</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Adjuvant Chemotherapy -->
+  <div class="cat-label">Adjuvant Chemotherapy (Category 3 – Group T4)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=14206&qt=item" target="_blank">14206</a></span></td>
+        <td class="item-desc">IV chemotherapy administration — first hour<small>Modified FOLFIRINOX or gemcitabine + nab-paclitaxel for 6 months post-resection. PESO/PRODIGE 24 evidence</small></td>
+        <td class="fee">~$145.45 ⚠</td>
+        <td class="benefit">~$109.10</td>
+        <td class="repeat"><span class="freq">Every 2 weeks</span><br>12 cycles (6 months)</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=14209&qt=item" target="_blank">14209</a></span></td>
+        <td class="item-desc">IV chemotherapy administration — each additional hour<small>Co-claimed with 14206 for prolonged infusions (e.g. 5-FU, oxaliplatin)</small></td>
+        <td class="fee">~$48.50 ⚠</td>
+        <td class="benefit">~$36.40</td>
+        <td class="repeat"><span class="freq">Per infusion session</span><br>as additional hours required</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- STAGE III — LOCALLY ADVANCED -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="stage-iii">
+  <span class="stage-pill stage-III">STAGE III</span>
+  <div class="section-title">Locally Advanced Disease — Stage III</div>
+  <div class="section-subtitle">Goal: systemic disease control, potential downstaging for resection. Key MBS categories: chemotherapy, biliary palliation, radiation planning, restaging.</div>
+
+  <div class="info-box">Locally advanced pancreatic cancer (LAPC) is typically unresectable due to encasement of the superior mesenteric artery, coeliac axis, or portal vein. First-line treatment is systemic chemotherapy (FOLFIRINOX preferred where performance status allows), with selective use of SBRT or chemoradiation. After 4–6 months, restaging determines conversion to resectability in ~10–15% of cases.</div>
+
+  <!-- Biliary Palliation -->
+  <div class="cat-label">Biliary Palliation — Stenting (Items as per Stage I–II ERCP section, repeated more frequently)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num">30491</span></td>
+        <td class="item-desc">Bile duct — endoscopic stenting (metal stent preferred in unresectable disease)<small>Self-expanding metal stent (SEMS) preferred over plastic in unresectable LAPC — longer patency (~9 months vs 3 months)</small></td>
+        <td class="fee">~$398.30 ⚠</td>
+        <td class="benefit">~$298.70</td>
+        <td class="repeat"><span class="freq">Once (SEMS)</span><br>or 3-monthly (plastic stent)</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num">30484</span></td>
+        <td class="item-desc">ERCP — therapeutic (for stent placement, clearance, re-stenting)</td>
+        <td class="fee">~$471.15 ⚠</td>
+        <td class="benefit">~$353.40</td>
+        <td class="repeat"><span class="freq">Every 3–6 months</span><br>stent exchange or complication</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Chemotherapy for LAPC -->
+  <div class="cat-label">Systemic Chemotherapy — Locally Advanced</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=14206&qt=item" target="_blank">14206</a></span></td>
+        <td class="item-desc">IV chemotherapy — first hour<small>FOLFIRINOX (folinic acid, fluorouracil, irinotecan, oxaliplatin) or gemcitabine + nab-paclitaxel</small></td>
+        <td class="fee">~$145.45 ⚠</td>
+        <td class="benefit">~$109.10</td>
+        <td class="repeat"><span class="freq">Fortnightly (FOLFIRINOX)</span><br>or weekly ×3/month (GnP)</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=14214&qt=item" target="_blank">14214</a></span></td>
+        <td class="item-desc">Ambulatory chemotherapy administration — pump<small>5-FU continuous infusion via portable ambulatory pump (FOLFIRINOX regimen)</small></td>
+        <td class="fee">~$98.55 ⚠</td>
+        <td class="benefit">~$73.90</td>
+        <td class="repeat"><span class="freq">Per cycle</span><br>46-hour infusion x12 cycles</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Radiation Oncology -->
+  <div class="cat-label">Radiation Oncology — SBRT / Chemoradiation (Category 3 – Group T5)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=15275&qt=item" target="_blank">15275</a></span></td>
+        <td class="item-desc">Radiation oncology — simulation, planning (complex)<small>CT-based simulation, treatment planning for SBRT or IMRT to pancreatic tumour</small></td>
+        <td class="fee">~$710.00 ⚠</td>
+        <td class="benefit">~$532.50</td>
+        <td class="repeat"><span class="freq">Once per course</span><br>per radiation treatment plan</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=15930&qt=item" target="_blank">15930</a></span></td>
+        <td class="item-desc">Megavoltage treatment — radiation oncology treatment (≤5 fractions — SBRT)<small>Stereotactic body radiotherapy (SBRT) for LAPC; typically 33–45 Gy in 3–5 fractions. Recently amended (Jul 2025)</small></td>
+        <td class="fee">~$310.00 ⚠</td>
+        <td class="benefit">~$232.50</td>
+        <td class="repeat"><span class="freq">3–5 fractions</span><br>per SBRT course</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Restaging -->
+  <div class="cat-label">Restaging &amp; Reassessment (Applies Items from Universal Section)</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num">56807</span></td>
+        <td class="item-desc">CT chest, abdomen &amp; pelvis with IV contrast — restaging after chemotherapy<small>At 8–12 weeks to assess response and resectability conversion</small></td>
+        <td class="fee">~$381.40 ⚠</td>
+        <td class="benefit">~$286.05</td>
+        <td class="repeat"><span class="freq">Every 8–12 weeks</span><br>response assessment</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num">61614</span></td>
+        <td class="item-desc">FDG-PET — post-therapy evaluation (restaging after neoadjuvant chemotherapy)<small>Selected cases where CT is equivocal regarding metastatic disease or response</small></td>
+        <td class="fee">~$953.00 ⚠</td>
+        <td class="benefit">~$714.75</td>
+        <td class="repeat"><span class="freq">1–2 per treatment course</span><br>at decision points</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num">30692 / 30694</span></td>
+        <td class="item-desc">EUS ± FNA — reassessment of local tumour response<small>If CT/PET inconclusive regarding resectability conversion; tissue re-sampling if initial FNA was non-diagnostic</small></td>
+        <td class="fee">~$425–563 ⚠</td>
+        <td class="benefit">~$319–422</td>
+        <td class="repeat"><span class="freq">Infrequent</span><br>at clinical decision points</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- STAGE IV — METASTATIC -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="stage-iv">
+  <span class="stage-pill stage-IV">STAGE IV</span>
+  <div class="section-title">Metastatic Disease — Stage IV</div>
+  <div class="section-subtitle">Goal: disease control, symptom management, quality of life, and survival prolongation. Median survival remains approximately 8–12 months with modern regimens.</div>
+
+  <!-- Palliative Biliary Drainage -->
+  <div class="cat-label">Palliative Biliary Drainage — ERCP &amp; Stenting</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num">30484 + 30491</span></td>
+        <td class="item-desc">ERCP with biliary metal stent insertion — palliative<small>SEMS strongly preferred in metastatic disease — 9–12 month patency avoids repeat procedures</small></td>
+        <td class="fee">~$870 combined ⚠</td>
+        <td class="benefit">~$652 combined</td>
+        <td class="repeat"><span class="freq">Once (SEMS)</span><br>re-intervention if occluded</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30721&qt=item" target="_blank">30721</a></span></td>
+        <td class="item-desc">Laparotomy or laparoscopy — palliative bypass (hepaticojejunostomy or gastrojejunostomy)<small>Surgical bypass for biliary or duodenal obstruction where ERCP fails or patient unsuitable. (Anaes.) (Assist.)</small></td>
+        <td class="fee">~$1,210.00 ⚠</td>
+        <td class="benefit">~$907.50</td>
+        <td class="repeat"><span class="freq">Once (palliative)</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Palliative Chemotherapy -->
+  <div class="cat-label">First-Line Palliative Chemotherapy</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num">14206 + 14209</span></td>
+        <td class="item-desc">IV chemotherapy — FOLFIRINOX (PS 0–1) or GnP (gemcitabine + nab-paclitaxel)<small>PRODIGE 4 trial: mFOLFIRINOX superior to gemcitabine (OS 11.1 vs 6.8 months). GnP for PS 0–1, age &gt;65 or hepatic mets</small></td>
+        <td class="fee">~$145–194 ⚠</td>
+        <td class="benefit">~$109–145</td>
+        <td class="repeat"><span class="freq">Every 2 weeks (FOLFIRINOX)</span><br>until progression/toxicity</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=14210&qt=item" target="_blank">14210</a></span></td>
+        <td class="item-desc">IV chemotherapy — gemcitabine monotherapy (PS 2 or unfit for combination)<small>Single-agent gemcitabine for patients unsuitable for combination chemotherapy</small></td>
+        <td class="fee">~$82.00 ⚠</td>
+        <td class="benefit">~$61.50</td>
+        <td class="repeat"><span class="freq">Weekly ×3 q4 weeks</span><br>until progression</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Molecular Testing -->
+  <div class="cat-label">Molecular &amp; Genetic Testing — Stage IV</div>
+  <div class="info-box">Molecular profiling is increasingly important in metastatic pancreatic cancer. BRCA1/2 somatic or germline mutations (~5–7%) predict response to olaparib (POLO trial). NTRK fusions, RET alterations, and TMB-high are rare but actionable. KRAS G12C inhibitors are in clinical trials.</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=73296&qt=item" target="_blank">73296</a></span></td>
+        <td class="item-desc">BRCA1/BRCA2 somatic testing — tumour tissue<small>For patients with metastatic pancreatic cancer to identify eligibility for olaparib maintenance therapy (POLO trial). Amended Mar 2025 to include primary peritoneal cancers.</small></td>
+        <td class="fee">~$1,270.00 ⚠</td>
+        <td class="benefit">~$952.50</td>
+        <td class="repeat"><span class="freq">Once</span><br>at time of metastatic diagnosis</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=73319&qt=item" target="_blank">73319</a></span></td>
+        <td class="item-desc">IDH1 variant testing in tumour tissue <span class="tag tag-new">New Jul 2025</span><small>Primarily for biliary tract tumours; occasionally tested in atypical pancreatic tumours</small></td>
+        <td class="fee">~$280.00 ⚠</td>
+        <td class="benefit">~$210.00</td>
+        <td class="repeat"><span class="freq">Once</span><br>at metastatic diagnosis for eligible tumours</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pain Management -->
+  <div class="cat-label">Pain Management — Coeliac Plexus Block &amp; Interventional</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=14236&qt=item" target="_blank">14236</a></span></td>
+        <td class="item-desc">Coeliac plexus block / neurolysis — image-guided<small>EUS-guided or CT-guided coeliac plexus neurolysis (CPN) for intractable pancreatic cancer pain. Significantly reduces opioid requirements. NHMRC evidence supported.</small></td>
+        <td class="fee">~$424.00 ⚠</td>
+        <td class="benefit">~$318.00</td>
+        <td class="repeat"><span class="freq">Once initially</span><br>can repeat if pain recurs (1–2/year)</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Biliary Drainage - EUS-guided -->
+  <div class="cat-label">Gastroduodenal Obstruction — Duodenal Stenting</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=30490&qt=item" target="_blank">30490</a></span></td>
+        <td class="item-desc">Oesophageal / gastroduodenal prosthesis insertion — incl. endoscopy and dilatation<small>Enteral (duodenal) SEMS for gastric outlet obstruction caused by tumour invasion of duodenum</small></td>
+        <td class="fee">~$398.30 ⚠</td>
+        <td class="benefit">~$298.70</td>
+        <td class="repeat"><span class="freq">Once</span><br>re-stenting if obstruction recurs</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ANAESTHESIA -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="anaesthesia">
+  <div class="section-title">Anaesthesia Items (Category 3 – T10)</div>
+  <div class="section-subtitle">Anaesthetic MBS items are calculated using the Relative Value Guide (RVG). Benefits are based on time units + basic units + modifying units. Fees listed below are approximate schedule fees only — actual benefit depends on time and modifiers.</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Basic Units (RVG)</th><th>Approx. Fee</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=21214&qt=item" target="_blank">21214</a></span></td>
+        <td class="item-desc">Anaesthesia — upper abdominal surgery (hepatobiliary/pancreatic)<small>Anaesthesia for Whipple's / distal pancreatectomy / total pancreatectomy</small></td>
+        <td class="benefit" style="font-family:'DM Mono',monospace;">15 units</td>
+        <td class="fee">~$1,050–1,400 ⚠</td>
+        <td class="repeat"><span class="freq">Once per surgical episode</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=21214&qt=item" target="_blank">21214</a></span></td>
+        <td class="item-desc">Anaesthesia — for ERCP and EUS procedures<small>IV sedation / general anaesthesia</small></td>
+        <td class="benefit" style="font-family:'DM Mono',monospace;">7–10 units</td>
+        <td class="fee">~$350–700 ⚠</td>
+        <td class="repeat"><span class="freq">Per endoscopic procedure</span></td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ONCOLOGY TX -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="oncology">
+  <div class="section-title">Oncology Treatment — Summary Across Stages</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Stage</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num">14206</span></td>
+        <td class="item-desc">IV chemotherapy — first hour</td>
+        <td class="fee">~$145.45 ⚠</td>
+        <td class="benefit">~$109.10</td>
+        <td class="repeat"><span class="freq">Per cycle</span></td>
+        <td><span class="stage-pill stage-I" style="font-size:10px;padding:1px 6px">II–IV</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num">14209</span></td>
+        <td class="item-desc">IV chemotherapy — each additional hour</td>
+        <td class="fee">~$48.50 ⚠</td>
+        <td class="benefit">~$36.40</td>
+        <td class="repeat"><span class="freq">Per infusion</span></td>
+        <td><span class="stage-pill stage-I" style="font-size:10px;padding:1px 6px">II–IV</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num">14214</span></td>
+        <td class="item-desc">Ambulatory chemotherapy — pump-based (5-FU 46h)</td>
+        <td class="fee">~$98.55 ⚠</td>
+        <td class="benefit">~$73.90</td>
+        <td class="repeat"><span class="freq">Per cycle</span></td>
+        <td><span class="stage-pill stage-I" style="font-size:10px;padding:1px 6px">II–IV</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num">14218</span></td>
+        <td class="item-desc">Medical oncology consultation — palliative chemotherapy review<small>Dedicated oncology attendance for palliative intent treatment</small></td>
+        <td class="fee">~$270.00 ⚠</td>
+        <td class="benefit">~$202.50</td>
+        <td class="repeat"><span class="freq">Monthly</span></td>
+        <td><span class="stage-pill stage-IV" style="font-size:10px;padding:1px 6px">IV</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- PALLIATION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="palliation">
+  <div class="section-title">Palliative Care — All Stages (Late)</div>
+  <div class="section-subtitle">Applicable to Stage III–IV and end-stage resectable disease. Palliative care MBS items support complex symptom management and care coordination.</div>
+  <table class="mbs-table">
+    <thead><tr><th>Item</th><th>Description</th><th>Schedule Fee</th><th>75% Benefit</th><th>Repeat Median</th><th>Type</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=3&qt=item" target="_blank">3</a></span></td>
+        <td class="item-desc">GP attendance — brief, home or clinic<small>Symptom review, prescribing, care coordination in palliative phase</small></td>
+        <td class="fee">$20.70</td>
+        <td class="benefit">$15.55</td>
+        <td class="repeat"><span class="freq">1–2 weekly</span><br>end of life</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=392&qt=item" target="_blank">392</a></span></td>
+        <td class="item-desc">GP chronic condition management plan (GPCCMP) <span class="tag tag-new">New Jul 2025</span><small>Replaced GPMP (Item 721) from 1 July 2025. Includes care planning, allied health referrals for palliative patients</small></td>
+        <td class="fee">~$157.90 ⚠</td>
+        <td class="benefit">~$118.45</td>
+        <td class="repeat"><span class="freq">Annually</span><br>review 6-monthly</td>
+        <td><span class="tag tag-secondary">Secondary</span></td>
+      </tr>
+      <tr>
+        <td><span class="item-num"><a href="https://www9.health.gov.au/mbs/fullDisplay.cfm?type=item&q=104&qt=item" target="_blank">104 / 105</a></span></td>
+        <td class="item-desc">Specialist — palliative care physician initial / subsequent<small>Specialist palliative care review for symptom management</small></td>
+        <td class="fee">$160 / $80 ⚠</td>
+        <td class="benefit">$120 / $60</td>
+        <td class="repeat"><span class="freq">Monthly</span><br>end of life</td>
+        <td><span class="tag tag-primary">Primary</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- NOTES & LEGEND -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="notes">
+  <div class="section-title">Notes &amp; Legend</div>
+
+  <div class="cat-label">Understanding Repeat Median</div>
+  <p style="font-size:12.5px; color:#334155; margin-bottom:12px;">The <strong>repeat median</strong> in this document refers to the estimated clinical frequency with which each MBS item is likely to be claimed for a pancreatic cancer patient within a treatment episode. This is not the same as the Medicare Item Report "repeat" figure, which describes the median number of times an item is billed per patient per year across all patients claiming that item. The Medicare Item Reports (Services Australia) provide quarter-by-quarter statistics on services rendered, patients, providers, and fee data. These are publicly available at <a href="https://www.servicesaustralia.gov.au/medicare-item-reports" target="_blank" style="color:var(--teal)">Services Australia Medicare Item Reports</a>.</p>
+
+  <div class="cat-label">Key MBS Rules for Pancreatic Cancer Items</div>
+  <div class="info-box" style="margin-bottom:10px;">
+    <strong>Multiple Operation Rule (MOR):</strong> When two or more Category 3 T8 surgical items are billed at the same sitting, the second item is paid at 50% and subsequent items at 25% of schedule fee. This applies to co-claimed items such as 30584 (Whipple's) + 30800 (splenectomy).
+  </div>
+  <div class="info-box amber" style="margin-bottom:10px;">
+    <strong>Hospital vs Non-Hospital Items:</strong> Items marked (H) can only be claimed for in-hospital patients (private or public). EUS items 30688–30694 are (H) items. CT and pathology items are available both in and out of hospital. MBS benefit = 75% for in-hospital; 85% for out-of-hospital bulk-billed.
+  </div>
+  <div class="info-box" style="margin-bottom:10px;">
+    <strong>EUS Co-claiming:</strong> EUS items (30688–30694) can be co-claimed with interventional ERCP items (30484, 30485, 30491, 30494) on the same day, same patient, same provider since the 2021 MBS reforms. This allows combined diagnostic/therapeutic procedures.
+  </div>
+  <div class="info-box amber" style="margin-bottom:10px;">
+    <strong>PET Scan (From Jul 2025):</strong> Items 61612 and 61614 have been expanded to cover any FDG-avid cancer including pancreatic ductal adenocarcinoma, removing the need for specific cancer type approvals. Neuroendocrine tumours of the pancreas may alternatively use DOTATATE PET (item 61650) as they are somatostatin receptor-avid.
+  </div>
+
+  <div class="cat-label">Legend</div>
+  <table class="mbs-table" style="max-width:480px;">
+    <tbody>
+      <tr><td><span class="tag tag-primary">Primary</span></td><td>Directly relates to pancreatic cancer detection or treatment</td></tr>
+      <tr><td><span class="tag tag-secondary">Secondary</span></td><td>Associated supporting item; common co-claim or secondary service</td></tr>
+      <tr><td><span class="tag tag-h">H</span></td><td>Hospital-only item — in-patient admission required</td></tr>
+      <tr><td><span class="tag tag-new">New Jul 2025</span></td><td>New or significantly amended from 1 July 2025</td></tr>
+      <tr><td><span class="confirm-icon">✓</span></td><td>Fee confirmed directly from MBS Online (July 2025)</td></tr>
+      <tr><td><span class="unconfirm-icon">⚠</span></td><td>Approximate fee — verify at <a href="https://www.mbsonline.gov.au" target="_blank" style="color:var(--teal)">mbsonline.gov.au</a></td></tr>
+      <tr><td><em>~$</em></td><td>Indicative fee based on MBS indexation modelling; not confirmed</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cat-label" style="margin-top:20px;">Quick Reference: Confirmed Schedule Fees (July 2025)</div>
+  <table class="mbs-table" style="max-width:560px;">
+    <thead><tr><th>Item</th><th>Service</th><th>Schedule Fee</th><th>75% Benefit</th></tr></thead>
+    <tbody>
+      <tr><td class="item-num">30584</td><td>Whipple's (Pancreaticoduodenectomy)</td><td class="fee">$3,499.65</td><td class="benefit">$2,624.75</td></tr>
+      <tr><td class="item-num">30583</td><td>Distal pancreatectomy (splenic preservation)</td><td class="fee">$1,813.30</td><td class="benefit">$1,360.00</td></tr>
+      <tr><td class="item-num">30792</td><td>Distal pancreatectomy + splenectomy</td><td class="fee">$1,393.20</td><td class="benefit">$1,044.90</td></tr>
+      <tr><td class="item-num">30593</td><td>Near total / total pancreatectomy</td><td class="fee">$2,202.15</td><td class="benefit">$1,651.65</td></tr>
+      <tr><td class="item-num">30688</td><td>EUS — staging of pancreatic cancer</td><td class="fee">$425.75</td><td class="benefit">$319.35</td></tr>
+      <tr><td class="item-num">30692</td><td>EUS — diagnosis of pancreatic tumour</td><td class="fee">$425.75</td><td class="benefit">$319.35</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footnote" style="margin-top:20px;">
+    Sources: MBS Online (mbsonline.gov.au), Services Australia, Department of Health and Aged Care. All fees reflect 1 July 2025 indexation (2.4%). This reference was compiled March 2026. Verify all items against current MBS Online prior to billing.
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+// Scrollspy for nav
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -65% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').slice(1);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>

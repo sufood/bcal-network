@@ -62,13 +62,13 @@ Rule-based flag system that identifies clinicians likely to adopt new treatments
 
 ## Quick Start (Local Development)
 
-Use **either** local dev **or** Docker — not both at the same time. Local dev uses SQLite on port 8000; Docker uses PostgreSQL on port 8001.
+Use **either** local dev **or** Docker — not both at the same time. Local dev uses SQLite on port 8002; Docker uses PostgreSQL on port 8001.
 
 ```bash
 make install       # install deps, Playwright browsers, copy .env
 # Edit .env with your API keys
 make migrate       # apply database migrations (SQLite by default)
-make run           # start API server on port 8000 with hot reload
+make run           # start API server on port 8002 with hot reload
 make ingest        # run full pipeline (scrape all sources + resolve + score)
 ```
 
@@ -79,16 +79,16 @@ uv sync --all-extras
 uv run playwright install chromium
 cp .env.example .env
 uv run alembic upgrade head
-uv run uvicorn gyn_kol.main:app --reload
+uv run uvicorn gyn_kol.main:app --reload --port 8002
 ```
 
-The API is now running at `http://127.0.0.1:8000`. Check `http://127.0.0.1:8000/health` to verify.
+The API is now running at `http://127.0.0.1:8002`. Check `http://127.0.0.1:8002/health` to verify.
 
 > **Note:** If Docker containers are running (`make up`), stop them first with `make down` to avoid port conflicts.
 
 ## Running with Docker
 
-Docker exposes the API on **port 8001** (not 8000) to avoid conflicts with local development.
+Docker exposes the API on **port 8001** (not 8002) to avoid conflicts with local development.
 
 ```bash
 make build         # build Docker image (includes Playwright)
@@ -159,29 +159,29 @@ Run the three steps in order:
 
 ```bash
 # 1. Scrape Canrefer specialists (all states, or filter to one)
-curl -X POST "http://localhost:8000/ingestion/canrefer"
-curl -X POST "http://localhost:8000/ingestion/canrefer?state=NSW"
+curl -X POST "http://localhost:8002/ingestion/canrefer"
+curl -X POST "http://localhost:8002/ingestion/canrefer?state=NSW"
 
 # 2. Scrape AHPRA registrations (defaults: Gynaecologist + Oncologist in NSW)
-curl -X POST "http://localhost:8000/ingestion/ahpra"
-curl -X POST "http://localhost:8000/ingestion/ahpra?states=NSW&states=VIC&search_terms=Gynaecologist"
+curl -X POST "http://localhost:8002/ingestion/ahpra"
+curl -X POST "http://localhost:8002/ingestion/ahpra?states=NSW&states=VIC&search_terms=Gynaecologist"
 
 # 3. Verify Canrefer specialists against AHPRA register
-curl -X POST "http://localhost:8000/ingestion/verify"
+curl -X POST "http://localhost:8002/ingestion/verify"
 ```
 
 ### Query Results
 
 ```bash
 # List Canrefer profiles (default: NSW)
-curl "http://localhost:8000/ingestion/canrefer/profiles?state=NSW"
+curl "http://localhost:8002/ingestion/canrefer/profiles?state=NSW"
 
 # List AHPRA registrations (filter by state and/or profession)
-curl "http://localhost:8000/ingestion/ahpra/registrations?state=NSW"
-curl "http://localhost:8000/ingestion/ahpra/registrations?profession=Gynaecologist"
+curl "http://localhost:8002/ingestion/ahpra/registrations?state=NSW"
+curl "http://localhost:8002/ingestion/ahpra/registrations?profession=Gynaecologist"
 
 # List verification results (filter by status: verified, unmatched_canrefer, unmatched_ahpra)
-curl "http://localhost:8000/ingestion/verifications?status=verified"
+curl "http://localhost:8002/ingestion/verifications?status=verified"
 ```
 
 ### Verification Logic
@@ -298,10 +298,10 @@ make up
 make ingest
 
 # Or step by step via API:
-curl -X POST http://localhost:8000/ingestion/canrefer
-curl -X POST http://localhost:8000/ingestion/ahpra
-curl -X POST http://localhost:8000/ingestion/verify
-curl -X POST http://localhost:8000/mbs/ingest
-curl -X POST http://localhost:8000/mbs/link
-curl -X POST http://localhost:8000/scores/recalculate
+curl -X POST http://localhost:8002/ingestion/canrefer
+curl -X POST http://localhost:8002/ingestion/ahpra
+curl -X POST http://localhost:8002/ingestion/verify
+curl -X POST http://localhost:8002/mbs/ingest
+curl -X POST http://localhost:8002/mbs/link
+curl -X POST http://localhost:8002/scores/recalculate
 ```

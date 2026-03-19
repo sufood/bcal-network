@@ -46,6 +46,20 @@ async def ingest_ahpra(
     return {"registrations_stored": count}
 
 
+@router.post("/ahpra/scan-authors")
+async def scan_authors_ahpra(
+    session: AsyncSession = Depends(get_session),
+) -> dict[str, Any]:
+    """Scan all Australian-affiliated PubMed authors against AHPRA (pre-resolution).
+
+    Skips authors already matched in previous runs.
+    """
+    from gyn_kol.ingestion.ahpra_enrich import scan_authors_against_ahpra
+
+    created = await scan_authors_against_ahpra(session)
+    return {"registrations_created": created}
+
+
 @router.post("/ahpra/enrich")
 async def enrich_ahpra_specialty(
     limit: int = Query(500, ge=1, le=5000, description="Max clinicians to look up"),

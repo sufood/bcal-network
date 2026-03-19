@@ -51,6 +51,16 @@ class ClinicianDetail(BaseModel):
     updated_at: datetime | None = None
 
 
+class PaperItem(BaseModel):
+    paper_id: str
+    title: str | None = None
+    journal: str | None = None
+    pub_date: str | None = None
+    doi: str | None = None
+    pmid: str | None = None
+    citation_count: int | None = None
+
+
 class ScoreOverride(BaseModel):
     influence_score: float | None = Field(None, ge=0, le=100)
     early_adopter_score: float | None = Field(None, ge=0, le=10)

@@ -19,7 +19,7 @@ migrate:
 	uv run alembic upgrade head
 
 run:
-	uv run uvicorn gyn_kol.main:app --reload
+	uv run uvicorn gyn_kol.main:app --reload --port 8002
 
 ingest:
 	uv run python -c "import asyncio; from gyn_kol.flows.ingestion_flow import ingestion_flow; asyncio.run(ingestion_flow())"

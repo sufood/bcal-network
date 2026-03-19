@@ -165,23 +165,22 @@ async def _search_and_open_detail(
         await page.wait_for_selector("#name-reg, #predictiveSearchHomeBtn", timeout=15000)
     except Exception:
         logger.debug("AHPRA enrichment: search form not found, proceeding anyway")
-    await asyncio.sleep(random.uniform(0.5, 1))
 
     # Fill full name into search field
     search_input = page.locator("#name-reg")
     await search_input.fill(full_name)
-    await asyncio.sleep(random.uniform(0.5, 1.5))
+    await asyncio.sleep(random.uniform(0.2, 0.5))
 
     # Select "Medical Practitioner" profession
     profession_dropdown = page.locator("#health-profession-dropdown .select")
     try:
         if await profession_dropdown.count() > 0 and await profession_dropdown.is_visible():
             await profession_dropdown.click()
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.2)
             option = page.locator("#health-profession-dropdown li:has-text('Medical Practitioner')")
             if await option.count() > 0:
                 await option.click()
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.2)
     except Exception:
         pass
 
@@ -197,7 +196,7 @@ async def _search_and_open_detail(
         )
     except Exception:
         pass
-    await asyncio.sleep(random.uniform(0.5, 1))
+    await asyncio.sleep(random.uniform(0.2, 0.5))
 
     # Collect result names and find best match index
     name_norm = normalise_name(full_name)
@@ -258,7 +257,7 @@ async def _search_and_open_detail(
     except Exception:
         logger.debug("AHPRA: detail page didn't load for '%s'", full_name)
         return None
-    await asyncio.sleep(random.uniform(0.3, 0.7))
+    await asyncio.sleep(random.uniform(0.1, 0.3))
 
     html = await page.content()
     detail = _parse_detail_page(html)
@@ -299,7 +298,7 @@ async def _worker(
                 logger.debug(
                     "AHPRA worker %d: failed for '%s'", worker_id, name, exc_info=True
                 )
-                await asyncio.sleep(random.uniform(1, 2))
+                await asyncio.sleep(random.uniform(0.5, 1))
                 continue
 
             if detail and detail.get("specialty"):
@@ -316,13 +315,71 @@ async def _worker(
                 )
 
             # Rate limit per worker — staggered across workers
-            await asyncio.sleep(random.uniform(1.5, 3))
+            await asyncio.sleep(random.uniform(0.5, 1.0))
     finally:
         await context.close()
 
 
 # Number of parallel browser contexts
-DEFAULT_WORKERS = 4
+DEFAULT_WORKERS = 8
+
+# Number of separate browser instances to avoid Playwright serialisation
+DEFAULT_BROWSERS = 2
+
+# Workers per browser instance
+WORKERS_PER_BROWSER = DEFAULT_WORKERS // DEFAULT_BROWSERS
+
+
+async def _run_browser_pool(
+    worker_fn: Any,
+    queue: asyncio.Queue,
+    results: list[tuple[str, str, dict[str, Any]]],
+    total: int,
+    progress: dict[str, int],
+    headless: bool,
+    num_workers: int,
+    num_browsers: int = DEFAULT_BROWSERS,
+    **worker_kwargs: Any,
+) -> None:
+    """Launch multiple independent browser instances, each running a subset of workers.
+
+    Avoids Playwright's internal serialisation on a single browser by
+    spreading workers across separate Chromium processes.
+
+    Extra *worker_kwargs* (e.g. ``on_match``) are forwarded to each worker.
+    """
+    from playwright.async_api import async_playwright
+
+    actual_workers = min(num_workers, total)
+    actual_browsers = min(num_browsers, actual_workers)
+    workers_per = max(1, actual_workers // actual_browsers)
+    remainder = actual_workers - workers_per * actual_browsers
+
+    async def _browser_group(
+        browser_idx: int, n_workers: int, worker_offset: int,
+    ) -> None:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=headless)
+            try:
+                tasks = [
+                    worker_fn(
+                        worker_offset + i, browser, queue, results, total, progress,
+                        **worker_kwargs,
+                    )
+                    for i in range(n_workers)
+                ]
+                await asyncio.gather(*tasks)
+            finally:
+                await browser.close()
+
+    groups = []
+    offset = 0
+    for b in range(actual_browsers):
+        n = workers_per + (1 if b < remainder else 0)
+        groups.append(_browser_group(b, n, offset))
+        offset += n
+
+    await asyncio.gather(*groups)
 
 
 async def enrich_specialty_from_ahpra(
@@ -333,7 +390,7 @@ async def enrich_specialty_from_ahpra(
 ) -> int:
     """Search AHPRA by full clinician name, visit detail page, update specialty.
 
-    Runs multiple browser contexts in parallel for throughput.
+    Runs multiple browser instances in parallel for throughput.
 
     Args:
         session: Async DB session.
@@ -344,8 +401,6 @@ async def enrich_specialty_from_ahpra(
     Returns:
         Number of clinicians updated with specialty.
     """
-    from playwright.async_api import async_playwright
-
     # Get clinicians without specialty, ordered by influence score desc
     stmt = (
         select(MasterClinician)
@@ -360,8 +415,8 @@ async def enrich_specialty_from_ahpra(
         return 0
 
     logger.info(
-        "AHPRA enrichment: looking up %d clinicians with %d workers",
-        len(clinicians), num_workers,
+        "AHPRA enrichment: looking up %d clinicians with %d workers across %d browsers",
+        len(clinicians), num_workers, DEFAULT_BROWSERS,
     )
 
     # Pre-fetch existing registration numbers to avoid per-row SELECT
@@ -384,16 +439,10 @@ async def enrich_specialty_from_ahpra(
     progress: dict[str, int] = {"done": 0}
     total = queue.qsize()
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=headless)
-        try:
-            workers = [
-                _worker(i, browser, queue, results, total, progress)
-                for i in range(min(num_workers, total))
-            ]
-            await asyncio.gather(*workers)
-        finally:
-            await browser.close()
+    await _run_browser_pool(
+        _worker, queue, results, total, progress,
+        headless=headless, num_workers=num_workers,
+    )
 
     # Apply results to DB (sequential — safe for async session)
     updated = 0
@@ -439,8 +488,15 @@ async def _scan_worker(
     results: list[tuple[str, str, dict[str, Any]]],
     total: int,
     progress: dict[str, int],
+    *,
+    on_match: Any | None = None,
 ) -> None:
-    """Like _worker but accepts any AHPRA match (specialty not required)."""
+    """Like _worker but accepts any AHPRA match (specialty not required).
+
+    If *on_match* is provided it is called as
+    ``await on_match(author_id, state, detail)`` after every successful
+    lookup so the caller can persist results incrementally.
+    """
     context = await browser.new_context(
         user_agent=USER_AGENT,
         viewport={"width": 1920, "height": 1080},
@@ -463,11 +519,13 @@ async def _scan_worker(
                 logger.debug(
                     "AHPRA scan w%d: failed for '%s'", worker_id, name, exc_info=True
                 )
-                await asyncio.sleep(random.uniform(1, 2))
+                await asyncio.sleep(random.uniform(0.5, 1))
                 continue
 
             if detail:
                 results.append((author_id, state, detail))
+                if on_match is not None:
+                    await on_match(author_id, state, detail)
                 logger.info(
                     "AHPRA scan [%d/%d] w%d: %s → found (match=%.0f, specialty=%s)",
                     idx, total, worker_id, name,
@@ -480,7 +538,7 @@ async def _scan_worker(
                     idx, total, worker_id, name,
                 )
 
-            await asyncio.sleep(random.uniform(1.5, 3))
+            await asyncio.sleep(random.uniform(0.5, 1.0))
     finally:
         await context.close()
 
@@ -499,11 +557,12 @@ async def scan_authors_against_ahpra(
     Authors whose normalised name already appears in ``ahpra_registrations``
     are skipped to avoid redundant lookups.
 
+    Results are committed to the DB incrementally so progress is visible
+    in real time and no work is lost if the scan is interrupted.
+
     Returns:
         Number of new ``AhpraRegistration`` rows created.
     """
-    from playwright.async_api import async_playwright
-
     # All Australian authors (state detected)
     stmt = select(Author).where(Author.state.isnot(None))
     authors = (await session.execute(stmt)).scalars().all()
@@ -552,45 +611,49 @@ async def scan_authors_against_ahpra(
     results: list[tuple[str, str, dict[str, Any]]] = []
     progress: dict[str, int] = {"done": 0}
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=headless)
-        try:
-            workers = [
-                _scan_worker(i, browser, queue, results, total, progress)
-                for i in range(min(num_workers, total))
-            ]
-            await asyncio.gather(*workers)
-        finally:
-            await browser.close()
+    # --- Incremental DB persistence via on_match callback ---------------
+    db_lock = asyncio.Lock()
+    created = {"count": 0}
 
-    # Persist new AhpraRegistration rows
-    created = 0
-    for _author_id, state, detail in results:
+    async def _persist_match(
+        _author_id: str, state: str, detail: dict[str, Any],
+    ) -> None:
         reg_num = detail.get("_registration_number") or detail.get("registration_number")
-        if reg_num and reg_num in existing_reg_nums:
-            continue  # already stored from a different name variant
 
-        name_raw = detail.get("name_raw", detail.get("_search_name", ""))
-        norm = normalise_name(name_raw)
+        async with db_lock:
+            if reg_num and reg_num in existing_reg_nums:
+                return  # already stored from a different name variant
 
-        session.add(AhpraRegistration(
-            name_raw=name_raw,
-            name_normalised=norm,
-            registration_number=reg_num,
-            profession=detail.get("profession"),
-            registration_type=detail.get("registration_type"),
-            specialty=detail.get("specialty"),
-            state=state,
-            raw_payload=detail,
-        ))
-        if reg_num:
-            existing_reg_nums.add(reg_num)
-        existing_names.add(norm)
-        created += 1
+            name_raw = detail.get("name_raw", detail.get("_search_name", ""))
+            norm = normalise_name(name_raw)
 
-    await session.commit()
+            session.add(AhpraRegistration(
+                name_raw=name_raw,
+                name_normalised=norm,
+                registration_number=reg_num,
+                profession=detail.get("profession"),
+                registration_type=detail.get("registration_type"),
+                specialty=detail.get("specialty"),
+                state=state,
+                raw_payload=detail,
+            ))
+            if reg_num:
+                existing_reg_nums.add(reg_num)
+            existing_names.add(norm)
+            created["count"] += 1
+
+            # Commit every match immediately so progress is visible
+            await session.commit()
+    # --------------------------------------------------------------------
+
+    await _run_browser_pool(
+        _scan_worker, queue, results, total, progress,
+        headless=headless, num_workers=num_workers,
+        on_match=_persist_match,
+    )
+
     logger.info(
         "AHPRA author scan: created %d new registrations from %d matches",
-        created, len(results),
+        created["count"], len(results),
     )
-    return created
+    return created["count"]

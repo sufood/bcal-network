@@ -6,7 +6,10 @@ from gyn_kol.database import get_session
 from gyn_kol.models.audit_log import AuditLog
 from gyn_kol.models.clinician import MasterClinician
 from gyn_kol.models.clinician_profile import ClinicianProfile
-from gyn_kol.schemas.clinician import ClinicianDetail, ClinicianListItem, ClinicianListResponse, ScoreOverride
+from gyn_kol.models.clinician_source_link import ClinicianSourceLink
+from gyn_kol.models.coauthorship import Coauthorship
+from gyn_kol.models.paper import Paper
+from gyn_kol.schemas.clinician import ClinicianDetail, ClinicianListItem, ClinicianListResponse, PaperItem, ScoreOverride
 
 router = APIRouter(prefix="/clinicians", tags=["clinicians"])
 
@@ -72,6 +75,54 @@ async def get_clinician(
         detail.engagement_approach = profile.engagement_approach
 
     return detail
+
+
+@router.get("/{clinician_id}/publications", response_model=list[PaperItem])
+async def get_clinician_publications(
+    clinician_id: str,
+    session: AsyncSession = Depends(get_session),
+) -> list[PaperItem]:
+    # Get author_ids linked to this clinician via source links
+    link_result = await session.execute(
+        select(ClinicianSourceLink.source_record_id).where(
+            ClinicianSourceLink.clinician_id == clinician_id,
+            ClinicianSourceLink.source == "pubmed",
+        )
+    )
+    author_ids = [row[0] for row in link_result.all()]
+    if not author_ids:
+        return []
+
+    # Get paper_ids from coauthorships
+    ca_result = await session.execute(
+        select(Coauthorship.paper_id)
+        .where(Coauthorship.author_id.in_(author_ids))
+        .distinct()
+    )
+    paper_ids = [row[0] for row in ca_result.all()]
+    if not paper_ids:
+        return []
+
+    # Fetch papers ordered by pub_date descending
+    paper_result = await session.execute(
+        select(Paper)
+        .where(Paper.paper_id.in_(paper_ids))
+        .order_by(Paper.pub_date.desc().nulls_last())
+    )
+    papers = paper_result.scalars().all()
+
+    return [
+        PaperItem(
+            paper_id=p.paper_id,
+            title=p.title,
+            journal=p.journal,
+            pub_date=p.pub_date,
+            doi=p.doi,
+            pmid=p.pmid,
+            citation_count=p.citation_count,
+        )
+        for p in papers
+    ]
 
 
 @router.patch("/{clinician_id}/score")

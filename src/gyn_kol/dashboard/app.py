@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 
 from gyn_kol.graph.export import export_pyvis_html_for_dashboard
 
-API_BASE = "http://127.0.0.1:8000"
+API_BASE = "http://127.0.0.1:8002"
 
 st.set_page_config(page_title="GYN KOL Dashboard", layout="wide")
 st.title("GYN KOL Identification Dashboard")
@@ -90,6 +90,42 @@ with tab_detail:
                 if detail.get("engagement_approach"):
                     st.subheader("Engagement Approach")
                     st.write(detail["engagement_approach"])
+
+                # Publications
+                with st.expander("Publications", expanded=True):
+                    try:
+                        pub_resp = httpx.get(
+                            f"{API_BASE}/clinicians/{cid}/publications", timeout=10,
+                        )
+                        pub_resp.raise_for_status()
+                        pubs = pub_resp.json()
+                        if pubs:
+                            for p in pubs:
+                                title = p.get("title") or "Untitled"
+                                journal = p.get("journal") or ""
+                                pub_date = p.get("pub_date") or ""
+                                doi = p.get("doi")
+                                pmid = p.get("pmid")
+
+                                if doi:
+                                    link = f"https://doi.org/{doi}"
+                                elif pmid:
+                                    link = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
+                                else:
+                                    link = None
+
+                                if link:
+                                    st.markdown(f"**[{title}]({link})**")
+                                else:
+                                    st.markdown(f"**{title}**")
+
+                                meta_parts = [x for x in [journal, pub_date] if x]
+                                if meta_parts:
+                                    st.caption(" · ".join(meta_parts))
+                        else:
+                            st.info("No publications found.")
+                    except Exception as exc:
+                        st.error(f"Error loading publications: {exc}")
 
                 # Ego network
                 with st.expander("Co-author Network", expanded=False):
